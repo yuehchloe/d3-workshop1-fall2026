@@ -3,7 +3,7 @@
 // ============================================================================
 
 // ============================================================================
-// SECTION 1: D3 SELECTIONS & DOM MANIPULATION 
+// SECTION 1: D3 SELECTIONS & DOM MANIPULATION
 // ============================================================================
 // D3 = "Data-Driven Documents" - it connects data to visual elements
 // DOM = Document Object Model - the structure of the webpage (HTML elements)
@@ -21,6 +21,10 @@ d3.select('#demo-1')
 
 // TODO: change the text above to add your name
 // TODO: change the color to something else you like // keep in mind color contrast
+d3.select('#demo-1')
+    .style('color', 'red')
+    .style('font-size', '50px')
+    .text('sushi');
 
 
 // Create and append new elements
@@ -30,3 +34,8 @@ d3.select('#demo-1')
     .style('background-color', 'lightgray');
 
 // TODO: append a new element with your favorite food and style it with a different background color
+d3.select('#demo-1')
+    .append('p')
+    .text('ramen')
+    .style('font-size', '50px')
+    .style('background-color', '#FFB6C1');

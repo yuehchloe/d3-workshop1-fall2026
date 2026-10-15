@@ -107,18 +107,74 @@ const hBarWidth = 400 - hBarMargin.left - hBarMargin.right;
 const hBarHeight = 500 - hBarMargin.top - hBarMargin.bottom;
 
 // Create SVG for horizontal bar chart
-
+const hBarSvg = d3.select('#demo-4')
+    .append('svg')
+    .attr('viewBox', `0 0 ${hBarWidth + hBarMargin.left + hBarMargin.right} ${hBarHeight + hBarMargin.top + hBarMargin.bottom}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet')
+    .append('g')
+    .attr('transform', `translate(${hBarMargin.left},${hBarMargin.top})`);
 
 // Create scales for the horizontal bar chart
+// X scale - linear scale for gas prices
+const XBarScale = d3.scaleLinear()
+    .domain([0, d3.max(top15Gas, d => d.gas)]) // Input: from 0 to max gas price
+    .range([0, hBarWidth]) // Output: width of the chart
+    .nice();
 
+// Y scale - categorical scale for states
+const YBar = d3.scaleBand()
+    .domain(top15Gas.map(d => d.state)) // Highest gas price appears at the top
+    .range([0, hBarHeight]) // Output: vertical positions for states
+    .padding(0.25); // Padding between bars
 
 // Create axes and append them to the svg
+// X axis
+const XAxis = d3.axisBottom(XBarScale)
+    .ticks(5)
+    .tickFormat(d => `$${d.toFixed(2)}`);
 
+hBarSvg.append('g')
+    .attr('transform', `translate(0, ${hBarHeight})`) // Move x axis to the bottom of the chart
+    .call(XAxis);
+
+// Y axis
+const YAxis = d3.axisLeft(YBar);
+
+hBarSvg.append('g')
+    .call(YAxis);
 
 // Create and append bars to the chart
-
+hBarSvg.selectAll('rect')
+    .data(top15Gas)
+    .join('rect')
+    .attr('x', XBarScale(0)) // Start every bar at zero gas price
+    .attr('y', d => YBar(d.state)) // Set vertical position based on state
+    .attr('width', d => XBarScale(d.gas) - XBarScale(0)) // Gas price controls bar length
+    .attr('height', YBar.bandwidth()) // Each state gets the same bar thickness
+    .attr('fill', 'orange'); // Set bar color
 
 // Chart title
-
+hBarSvg.append('text')
+    .attr('x', hBarWidth / 2) // Center the title horizontally
+    .attr('y', -10) // Position the title above the chart
+    .attr('text-anchor', 'middle') // Center the text
+    .style('font-size', '16px')
+    .style('font-weight', 'bold')
+    .text('Top 15 States by Gas Price');
 
 // X axis label
+hBarSvg.append('text')
+    .attr('x', hBarWidth / 2) // Center the label horizontally along the x axis
+    .attr('y', hBarHeight + 50) // Position the label below the x axis
+    .attr('text-anchor', 'middle') // Center the text
+    .style('font-size', '12px')
+    .text('Gas Price (per gallon)');
+
+// Y axis label
+hBarSvg.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -hBarHeight / 2)
+    .attr('y', -120) // Leave room for state names
+    .attr('text-anchor', 'middle')
+    .style('font-size', '12px')
+    .text('State');
