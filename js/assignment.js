@@ -322,11 +322,11 @@ svg.append('rect')
 svg.append('text')
     .attr('class', 'chart-title')
     .attr('x', width / 2)
-    .attr('y', -30)
+    .attr('y', -20)
     .attr('text-anchor', 'middle')
     .style('font-size', '18px')
     .style('font-weight', 'bold')
-    .text('Stock Prices: Apple (AAPL), Google (GOOG), Amazon (AMZN), IBM (IBM), Microsoft (MSFT)');
+    .text('Stock Closing Prices Over Time');
 
 // X Axis Label
 // TODO: Add a label below the x-axis
